@@ -1,0 +1,9 @@
+/* 小圆点点击变色 */
+.ban .indicator .active {
+    background-color: url(../images/banner.png);
+    background-position: -16px -343px;
+}
+/* 轮播图更换图片 */
+.ban .banner ul .active {
+    opacity: 1;
+}

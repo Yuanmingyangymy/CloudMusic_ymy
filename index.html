@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网易云音乐</title>
+    <script crossorigin="anonymous" src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <!-- 快捷导航 -->
+    <div class="shortcut">
+        <div class="wrapper">
+            <div class="logo"><a href="#"></a></div>
+            <ul>
+                <li><a href="#"  class="active">发现音乐</a> </li>
+                <li><a href="#">我的音乐</a> </li>
+                <li><a href="#">关注</a> </li>
+                <li><a href="#">商城</a> </li>
+                <li><a href="#">音乐人</a> </li>
+                <li><a href="#" class="hot">下载客户端<span></span></a> </li>
+            </ul>
+
+            <!-- 搜索框 -->
+            <div class="search">
+                <input type="text" placeholder="音乐/视频/电台/用户" name="keyword" @keyup.enter="toResult">
+                <!-- 放大镜 -->
+                <span></span>
+                <!-- <div class="suggest">
+
+                    <p class="note s-fc3"><a class="s-fc3 xtag" href="#"></a> &gt;</p>
+                    <div class="rap">
+                        <div class="itm f-cb">
+                            <h3 class="hd">
+                                <i class="icn u-icn u-icn-26"></i>
+                                <em class="fl">单曲</em>
+                            </h3>
+                            <ul class="f-cb">
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a><span class="s-fc7 f-tdn"></span></li>
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a><span class="s-fc7 f-tdn"></span></li>
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a><span class="s-fc7 f-tdn"></span></li>
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a><span class="s-fc7 f-tdn"></span></li>
+                            </ul>
+                        </div>
+                        <div class="itm f-cb">
+                            <h3 class="hd">
+                                <i class="icn u-icn u-icn-27"></i>
+                                <em class="fl">歌手</em>
+                            </h3>
+                            <ul class="odd f-cb">
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a></li>
+                                
+                            </ul>
+                        </div>
+                        <div class="itm f-cb">
+                            <h3 class="hd">
+                                <i class="icn u-icn u-icn-28"></i>
+                                <em class="fl">专辑</em>
+                            </h3>
+                            <ul class="f-cb">
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a><span class="s-fc7 f-tdn"></span></li>
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a><span class="s-fc7 f-tdn"></span></li>
+                                
+                            </ul>
+                        </div>
+                        <div class="itm f-cb">
+                            <h3 class="hd">
+                                <i class="icn u-icn u-icn-29"></i>
+                                <em class="fl">歌单</em>
+                            </h3>
+                            <ul class="odd f-cb">
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a><span class="s-fc7 f-tdn"></span></li>
+                                <li><a href="#" class="s-fc0 f-thide xtag"></a><span class="s-fc7 f-tdn"></span></li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div> -->
+                <div id="suggest-list">
+                    <div class="tit"></div>
+                    <div class="list"></div>
+                        <div class="left-list">
+                            <ul>
+                                <li class="l1"><i></i>单曲</li>
+                                <li class="l2"><i></i>歌手</li>
+                                <li class="l3"><i></i>专辑</li>
+                                <li class="l4"><i></i>歌单</li>
+                            </ul>
+                        </div>
+                        <div class="right-list">
+                            <li class="r1 hide"></li>
+                            <li class="r2 hide"></li>
+                            <li class="r3 hide"></li>
+                            <li class="r4 hide"></li>
+                        </div>
+                </div>
+            </div>
+            <!-- 歌曲信息渲染表格 -->
+            <!-- <table>
+                <tr>
+                    <td>歌手</td>
+                    <td>歌名</td>
+                    <td>专辑</td>
+                </tr>
+            </table> -->
+            <!-- 创作者中心 -->
+            <div class="creator">
+                创作者中心
+            </div>
+            <a href="#" class="signIn">登录</a>
+        </div>
+    </div>
+    <!-- 发现音乐下方 -->
+    <div class="find">
+        <ul>
+            <li><a href="#">推荐</a></li>
+            <li><a href="#">排行榜</a></li>
+            <li><a href="#">歌单</a></li>
+            <li><a href="#">主题电台</a></li>
+            <li><a href="#">歌手</a></li>
+            <li><a href="#">新碟上架</a></li>
+        </ul>
+    </div>
+    <!-- 轮播图 -->
+    <div class="ban">
+        <div class="bg" id="bg"></div>
+        <div class="wrap">
+            <div class="banner">
+                <ul>
+                    <li class="active"><a href="#"><img src="./uploads/pic1.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="./uploads/pic2.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="./uploads/pic3.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="./uploads/pic4.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="./uploads/pic5.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="./uploads/pic6.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="./uploads/pic7.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="./uploads/pic8.jpg" alt=""></a></li>
+                </ul>
+            </div>
+            <!-- 小圆点 -->
+            <div class="indicator">
+                <i class="active"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+
+            <div class="download">
+                <a href="#"></a>
+                <p>PC 安卓 iPhone WP iPad Mac 六大客户端</p></div>
+        </div>
+        <!-- 翻页按钮 -->
+        <a href="javascript:void[0]" class="prev pn"></a>
+        <a href="javascript:void[0]" class="next pn"></a>
+    </div>
+    <!-- 其他主要内容 -->
+    <div class="main">
+        <div class="left">
+            <!-- 热门推荐 -->
+            <div class="recommoned">
+                <!-- 导航1 -->
+                <div class="nav1">
+                    <a href="#" class="rm">热门推荐</a>
+                    <div class="tab">
+                        <ul>
+                            <li><a href="#">华语</a><span>|</span></li>
+                            <li><a href="#">流行</a><span>|</span></li>
+                            <li><a href="#">摇滚</a><span>|</span></li>
+                            <li><a href="#">民谣</a><span>|</span></li>
+                            <li><a href="#">电子</a></li>
+                        </ul>
+                    </div>
+                    
+                    <i></i>
+                    <a href="#" class="more">更多</a>
+                </div>
+                <div class="content1">
+                    <ul>
+                        <li>
+                            <div class="cover">
+                                <a href="#"><img src="" alt=""></a>
+                                <div class="bottom">
+                                <a class="icon-play f-fr" title="播放" href="javascript:;"></a>
+                                <span class="icon-headset"></span>
+                                <span class="nb">1152万</span>
+                            </div>
+                            <p></p>
+                        </li>
+                        <li>
+                            <div class="cover">
+                                <a href="#"><img src="" alt=""></a>
+                                <div class="bottom">
+                                <a class="icon-play f-fr" title="播放" href="javascript:;"></a>
+                                <span class="icon-headset"></span>
+                                <span class="nb">1152万</span>
+                            </div>
+                            <p></p>
+                        </li>
+                        <li>
+                            <div class="cover">
+                                <a href="#"><img src="" alt=""></a>
+                                <div class="bottom">
+                                <a class="icon-play f-fr" title="播放" href="javascript:;"></a>
+                                <span class="icon-headset"></span>
+                                <span class="nb">1152万</span>
+                            </div>
+                            <p></p>
+                        </li>
+                        <li>
+                            <div class="cover">
+                                <a href="#"><img src="" alt=""></a>
+                                <div class="bottom">
+                                <a class="icon-play f-fr" title="播放" href="javascript:;"></a>
+                                <span class="icon-headset"></span>
+                                <span class="nb">1152万</span>
+                            </div>
+                            <p></p>
+                        </li>
+                        <li>
+                            <div class="cover">
+                                <a href="#"><img src="" alt=""></a>
+                                <div class="bottom">
+                                <a class="icon-play f-fr" title="播放" href="javascript:;"></a>
+                                <span class="icon-headset"></span>
+                                <span class="nb">1152万</span>
+                            </div>
+                            <p></p>
+                        </li>
+                        <li>
+                            <div class="cover">
+                                <a href="#"><img src="" alt=""></a>
+                                <div class="bottom">
+                                <a class="icon-play f-fr" title="播放" href="javascript:;"></a>
+                                <span class="icon-headset"></span>
+                                <span class="nb">1152万</span>
+                            </div>
+                            <p></p>
+                        </li>
+                        <li>
+                            <div class="cover">
+                                <a href="#"><img src="" alt=""></a>
+                                <div class="bottom">
+                                <a class="icon-play f-fr" title="播放" href="javascript:;"></a>
+                                <span class="icon-headset"></span>
+                                <span class="nb">1152万</span>
+                            </div>
+                            <p></p>
+                        </li>
+                        <li>
+                            <div class="cover">
+                                <a href="#"><img src="" alt=""></a>
+                                <div class="bottom">
+                                <a class="icon-play f-fr" title="播放" href="javascript:;"></a>
+                                <span class="icon-headset"></span>
+                                <span class="nb">1152万</span>
+                            </div>
+                            <p></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 新碟上架 -->
+            <div class="new">
+                <!-- 导航2 -->
+                <div class="nav2">
+                    <a href="#" class="rm">新碟上架</a>
+                    <i></i>
+                    <a href="#" class="more">更多</a>
+                </div>
+                <div class="n-disk">
+                    <div class="inner">
+                        <a href="javascript:void[0]" class="prev new_btn"></a>
+                        <div class="roll">
+                            <ul class="active">
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                                <li>
+                                    <div class="cover">
+                                        <img src="" alt="">
+                                        <a href="#" class="mask"></a>
+                                    </div>
+                                    <p class="title"></p>
+                                    <p class="singer"></p>
+                                </li>
+                            </ul>
+                            
+                        </div>
+                        <a href="javascript:void[0]" class="next new_btn"></a>
+                    </div>
+                </div>
+            </div>
+            <!-- 榜单 -->
+            <div class="bill">
+                <!-- 导航3 -->
+                <div class="nav3">
+                    <a href="#" class="rm">榜单</a>
+                    <i></i>
+                    <a href="#" class="more">更多</a>
+                </div>
+                <div class="blist">
+                    <dl class="dlk">
+                        <dt class="top">
+                            <div class="cov">
+                                <img src="./images/飙升榜.jpg" alt="">
+                                <a href="#" class="msk"></a>
+                            </div>
+                            <div class="tit">
+                                <a href="#"><h3 class="bsb">飙升榜</h3></a>
+                                <div class="btn">
+                                    <a href="#" class="play"></a>
+                                    <a href="#" class="sc"></a>
+                                </div>
+                            </div>
+                        </dt>
+                        <dd class="bsb">
+                            <ol>
+                                <li>
+                                    <span class="no stop">1</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no stop">2</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no stop">3</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">4</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">5</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">6</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">7</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">8</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">9</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">10</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                            </ol>
+                            <div class="more">
+                                <a href="#">查看全部></a>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl class="dlk">
+                        <dt class="top">
+                            <div class="cov">
+                                <img src="./images/新歌榜.jpg" alt="">
+                                <a href="#" class="msk"></a>
+                            </div>
+                            <div class="tit">
+                                <a href="#"><h3 class="bsb">新歌榜</h3></a>
+                                <div class="btn">
+                                    <a href="#" class="play"></a>
+                                    <a href="#" class="sc"></a>
+                                </div>
+                            </div>
+                        </dt>
+                        <dd class="xgb">
+                            <ol>
+                                <li>
+                                    <span class="no stop">1</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no stop">2</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no stop">3</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">4</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">5</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">6</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">7</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">8</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">9</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">10</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                            </ol>
+                            <div class="more">
+                                <a href="#">查看全部></a>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl class="dlk">
+                        <dt class="top">
+                            <div class="cov">
+                                <img src="./images/原创榜.jpg" alt="">
+                                <a href="#" class="msk"></a>
+                            </div>
+                            <div class="tit">
+                                <a href="#"><h3 class="bsb">原创榜</h3></a>
+                                <div class="btn">
+                                    <a href="#" class="play"></a>
+                                    <a href="#" class="sc"></a>
+                                </div>
+                            </div>
+                        </dt>
+                        <dd class="ycb">
+                            <ol>
+                                <li>
+                                    <span class="no stop">1</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no stop">2</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no stop">3</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">4</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">5</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">6</span>
+                                    <a href="#" class="nm f-thide">晴天</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">7</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">8</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">9</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="no">10</span>
+                                    <a href="#" class="nm f-thide">反方向的钟</a>
+                                    <div class="oper">
+                                        <a href="#" class="s-bg s-bg-11"></a>
+                                        <a href="#" class="u-icn u-icn-81"></a>
+                                        <a href="#" class="s-bg s-bg-12"></a>
+                                    </div>
+                                </li>
+                            </ol>
+                            <div class="more">
+                                <a href="#">查看全部></a>
+                            </div>
+                        </dd>
+                    </dl>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="user">
+                <div class="info">
+                    <p>登录网易云音乐，可以享受无限收藏的乐趣，并且无限同步到手机</p>
+                    <a href="#">用户登录</a>
+                </div>
+            </div>
+            <div class="singer">
+                <h3>
+                    <span>入驻歌手</span>
+                    <a href="#">查看全部 ></a>
+                </h3>
+                <ul class="singer-list">
+                    <li>
+                        <a href="/user/home?id=29879272">
+                            <div class="head">
+                                <img src="./images/张惠妹.jpg" alt="">
+                            </div>
+                            <div class="info">
+                                <h4>
+                                    <span class="wz">张惠妹aMEI</span>
+                                </h4>
+                                <p class="wz">台湾歌手张惠妹</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/user/home?id=29879272">
+                            <div class="head">
+                                <img src="./images/吴莫愁.jpg" alt="">
+                            </div>
+                            <div class="info">
+                                <h4>
+                                    <span class="wz">吴莫愁Momo</span>
+                                </h4>
+                                <p class="wz">《中国好声音》选手吴莫愁</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/user/home?id=29879272">
+                            <div class="head">
+                                <img src="./images/孙楠.jpg" alt="">
+                            </div>
+                            <div class="info">
+                                <h4>
+                                    <span class="wz">孙楠</span>
+                                </h4>
+                                <p class="wz">歌手孙楠 代表作《你快回来》《燃烧》</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/user/home?id=29879272">
+                            <div class="head">
+                                <img src="./images/老狼.jpg" alt="">
+                            </div>
+                            <div class="info">
+                                <h4>
+                                    <span class="wz">麦田老狼</span>
+                                </h4>
+                                <p class="wz">歌手，音乐人。代表作《同桌的你》等。</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/user/home?id=29879272">
+                            <div class="head">
+                                <img src="./images/陈楚生.jpg" alt="">
+                            </div>
+                            <div class="info">
+                                <h4>
+                                    <span class="wz">陈楚生</span>
+                                </h4>
+                                <p class="wz">唱作歌手</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="sign">
+                    <a href="#" class="btn_sign">
+                        <i>申请成为网易音乐人</i>
+                    </a>
+                </div>
+            </div>
+            <div class="dj">
+                <h3>热门主播</h3>
+                <ul>
+                    <li>
+                        <a href="#" class="cver">
+                           <img src="./images/陈立.jpg" alt="">
+                        </a>
+                        <div class="info">
+                            <p>
+                                <a href="#" class="wz nm-icn">陈立</a>
+                            </p>
+                            <p class="wz">心理学家、美食家陈立教授</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" class="cver">
+                           <img src="./images/刘维.jpg" alt="">
+                        </a>
+                        <div class="info">
+                            <p>
+                                <a href="#" class="wz nm-icn">刘维-Julius</a>
+                            </p>
+                            <p class="wz">歌手、播客节目《维维道来》主理人</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" class="cver">
+                           <img src="./images/莫非.jpg" alt="">
+                        </a>
+                        <div class="info">
+                            <p>
+                                <a href="#" class="wz nm-icn">莫非定律MoreFeel</a>
+                            </p>
+                            <p class="wz">男女双人全创作独立乐团</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" class="cver">
+                           <img src="./images/许美达.jpg" alt="">
+                        </a>
+                        <div class="info">
+                            <p>
+                                <a href="#" class="wz nm-icn">碎嘴许美达</a>
+                            </p>
+                            <p class="wz">脱口秀网络红人</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" class="cver">
+                           <img src="./images/银临.jpg" alt="">
+                        </a>
+                        <div class="info">
+                            <p>
+                                <a href="#" class="wz nm-icn">银临Rachel</a>
+                            </p>
+                            <p class="wz"></p>
+                        </div>
+                    </li>
+            </div>
+        </div>
+    </div>
+    <!-- 版权信息 -->
+    <div class="footer">
+        <div class="ft">
+            <div class="cnt">
+                <div class="copy">
+                    <p class="link" id="music-link">
+                        <a href="//st.music.163.com/official-terms/service" target="_blank" class="item s-fc4">服务条款</a><span class="line">|</span>
+                        <a href="//st.music.163.com/official-terms/privacy" target="_blank" class="item s-fc4">隐私政策</a><span class="line">|</span>
+                        <a href="//st.music.163.com/official-terms/children" target="_blank" class="item s-fc4">儿童隐私政策</a><span class="line">|</span>
+                        <a href="//music.163.com/st/staticdeal/complaints.html" target="_blank" class="item s-fc4">版权投诉</a><span class="line">|</span>
+                        <a href="http://ir.music.163.com" target="_blank" class="item s-fc4">投资者关系</a><span class="line">|</span>
+                        <a href="https://music.163.com/ui/resource" rel="noopener noreferrer" target="_blank" class="item s-fc4">广告合作</a>
+                        <span class="line">|</span>
+                        <a href="https://jubao.163.com" rel="noopener noreferrer" target="_blank" class="item s-fc4">廉正举报</a><span class="line">|</span>
+                        <a onclick="nm.x.biLog('click', {mspm:'61f261f4b99b0d5882ce3a78',page:'web_netease_music_homepage',target:'base_fast_access'});return true;" href="//mp.music.163.com/600948c936c13f4d09752e73/contact-us-web/index.html?source=Music-Main-Station" target="_blank" class="s-fc4">联系我们</a>
+                    </p>
+                    <p class="right s-fc3">
+                        <span class="sep span">网易公司版权所有©1997-2022</span><span class="span">杭州乐读科技有限公司运营：</span><a href="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/8282703158/452a/ca0c/3a10/caad83bc8ffaa850a9dc1613d74824fc.png" target="_blank" class="alink s-fc3">浙网文[2021] 1186-054号</a>
+                    </p>
+                    <p class="right s-fc3">
+                        <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="noopener noreferrer" target="_blank" class="alink s-fc3">粤B2-20090191-18&nbsp;&nbsp;工业和信息化部备案管理系统网站</a>
+                        <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010902002564" rel="noopener noreferrer" target="_blank" class="alink s-fc3 police-link">
+                        <span class="police-logo"></span>
+                        <span class="police-text">浙公网安备 33010902002564号</span>
+                        </a>
+                    </p>
+                    <p class="right s-fc3">
+                    <span class="span">互联网宗教信息服务许可证：浙（2022）0000120</span>
+                    </p>
+                </div>
+                <ul class="pics">
+                    <li>
+                        <a href="#" class="logo aone"></a>
+                        <span class="sone"></span>
+                    </li>
+                    <li>
+                        <a href="#" class="logo atwo"></a>
+                        <span class="stwo"></span>
+                    </li>
+                    <li>
+                        <a href="#" class="logo athree"></a>
+                        <span class="sthree"></span>
+                    </li>
+                    <li>
+                        <a href="#" class="logo afour"></a>
+                        <span class="sfour"></span>
+                    </li>
+                    <li>
+                        <a href="#" class="logo afive"></a>
+                        <span class="sfive"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 轮播图JS
+
+        
+        </script>
+    <script src="./js/api.js"></script>
+</body>
+</html>
